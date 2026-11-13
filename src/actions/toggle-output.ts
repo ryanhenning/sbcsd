@@ -5,7 +5,8 @@ import {
     KeyDownEvent,
     SingletonAction,
     TouchTapEvent,
-    WillAppearEvent
+    WillAppearEvent,
+    WillDisappearEvent
 } from "@elgato/streamdeck";
 import streamDeck from "@elgato/streamdeck";
 import { AudioOutput, sbzService } from "../services/sbz-switch";
@@ -16,8 +17,20 @@ type ToggleOutputSettings = {
 
 @action({ UUID: "com.ryanhenning.sbcsd.toggle" })
 export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
+    private activeActions = new Set<any>();
+    private unsubscribeWatcher: (() => void) | null = null;
+
     override async onWillAppear(ev: WillAppearEvent<ToggleOutputSettings>): Promise<void> {
-        // Try to query device state first, fallback to cached settings or default to Headphones
+        this.activeActions.add(ev.action);
+        
+        // Ensure event watcher is listening
+        if (!this.unsubscribeWatcher) {
+            this.unsubscribeWatcher = sbzService.addChangeListener(async (output) => {
+                await this.onOutputChanged(output);
+            });
+        }
+
+        // Initial sync on display
         const detected = await sbzService.getCurrentOutput();
         const activeOutput = detected ?? ev.payload.settings.currentOutput ?? AudioOutput.Headphones;
 
@@ -26,6 +39,28 @@ export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
         }
 
         await this.updateAppearance(ev.action, activeOutput);
+    }
+
+    override async onWillDisappear(ev: WillDisappearEvent<ToggleOutputSettings>): Promise<void> {
+        this.activeActions.delete(ev.action);
+        if (this.activeActions.size === 0 && this.unsubscribeWatcher) {
+            this.unsubscribeWatcher();
+            this.unsubscribeWatcher = null;
+        }
+    }
+
+    private async onOutputChanged(newOutput: AudioOutput): Promise<void> {
+        for (const act of this.activeActions) {
+            try {
+                const settings = (await act.getSettings()) as ToggleOutputSettings;
+                if (settings.currentOutput !== newOutput) {
+                    await act.setSettings({ currentOutput: newOutput });
+                    await this.updateAppearance(act, newOutput);
+                }
+            } catch (err) {
+                streamDeck.logger.warn(`Failed to update action appearance from event: ${err}`);
+            }
+        }
     }
 
     override async onKeyDown(ev: KeyDownEvent<ToggleOutputSettings>): Promise<void> {
@@ -41,7 +76,6 @@ export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
     }
 
     override async onDialRotate(ev: DialRotateEvent<ToggleOutputSettings>): Promise<void> {
-        // Dial rotation can also toggle if rotated
         await this.toggle(ev.action, ev.payload.settings);
     }
 
@@ -55,11 +89,11 @@ export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
 
             await sbzService.setOutput(target);
 
-            // Save state
-            await actionItem.setSettings({ currentOutput: target });
-
-            // Update UI
-            await this.updateAppearance(actionItem, target);
+            // Update all active instances immediately
+            for (const act of this.activeActions) {
+                await act.setSettings({ currentOutput: target });
+                await this.updateAppearance(act, target);
+            }
         } catch (error) {
             streamDeck.logger.error(`Failed to toggle audio output: ${error}`);
             if (actionItem.showAlert) {
@@ -74,12 +108,10 @@ export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
 
         if (actionItem.isKey()) {
             await actionItem.setTitle(title);
-            // Can switch between 0 and 1 if states are defined in manifest
             if (actionItem.setState) {
                 await actionItem.setState(isHeadphones ? 0 : 1);
             }
         } else if (actionItem.isDial()) {
-            // For Stream Deck+ touch strip / encoder feedback
             if (actionItem.setFeedback) {
                 await actionItem.setFeedback({
                     title: "Output",
@@ -93,3 +125,4 @@ export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
         }
     }
 }
+
