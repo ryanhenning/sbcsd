@@ -9,8 +9,7 @@
 			"Icon": "imgs/actions/counter/icon",
 			"Tooltip": "Toggles Creative Sound Blaster output between Headphones and Speakers.",
 			"Controllers": [
-				"Keypad",
-				"Encoder"
+				"Keypad"
 			],
 			"States": [
 				{

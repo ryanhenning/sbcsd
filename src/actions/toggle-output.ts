@@ -1,10 +1,7 @@
 import {
     action,
-    DialDownEvent,
-    DialRotateEvent,
     KeyDownEvent,
     SingletonAction,
-    TouchTapEvent,
     WillAppearEvent,
     WillDisappearEvent
 } from "@elgato/streamdeck";
@@ -67,18 +64,6 @@ export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
         await this.toggle(ev.action, ev.payload.settings);
     }
 
-    override async onDialDown(ev: DialDownEvent<ToggleOutputSettings>): Promise<void> {
-        await this.toggle(ev.action, ev.payload.settings);
-    }
-
-    override async onTouchTap(ev: TouchTapEvent<ToggleOutputSettings>): Promise<void> {
-        await this.toggle(ev.action, ev.payload.settings);
-    }
-
-    override async onDialRotate(ev: DialRotateEvent<ToggleOutputSettings>): Promise<void> {
-        await this.toggle(ev.action, ev.payload.settings);
-    }
-
     private async toggle(actionItem: any, settings: ToggleOutputSettings): Promise<void> {
         try {
             // Determine target output
@@ -110,17 +95,6 @@ export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
             await actionItem.setTitle(title);
             if (actionItem.setState) {
                 await actionItem.setState(isHeadphones ? 0 : 1);
-            }
-        } else if (actionItem.isDial()) {
-            if (actionItem.setFeedback) {
-                await actionItem.setFeedback({
-                    title: "Output",
-                    value: title,
-                    indicator: isHeadphones ? 0 : 100
-                });
-            }
-            if (actionItem.setTitle) {
-                await actionItem.setTitle(title);
             }
         }
     }
