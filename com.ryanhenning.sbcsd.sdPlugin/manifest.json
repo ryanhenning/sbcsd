@@ -1,0 +1,55 @@
+{
+	"Name": "sbcsd",
+	"Version": "0.1.0.0",
+	"Author": "ryanhenning",
+	"Actions": [
+		{
+			"Name": "Toggle Output",
+			"UUID": "com.ryanhenning.sbcsd.toggle",
+			"Icon": "imgs/actions/counter/icon",
+			"Tooltip": "Toggles Creative Sound Blaster output between Headphones and Speakers.",
+			"Controllers": [
+				"Keypad",
+				"Encoder"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/counter/key",
+					"Name": "Headphones",
+					"Title": "Headphones",
+					"TitleAlignment": "middle"
+				},
+				{
+					"Image": "imgs/actions/counter/key",
+					"Name": "Speakers",
+					"Title": "Speakers",
+					"TitleAlignment": "middle"
+				}
+			]
+		}
+	],
+	"Category": "sbcsd",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"CodePath": "bin/plugin.js",
+	"Description": "Toggle SoundBlaster Command output between Headphones and Speaker",
+	"Icon": "imgs/plugin/marketplace",
+	"SDKVersion": 3,
+	"Software": {
+		"MinimumVersion": "7.1"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Nodejs": {
+		"Version": "24",
+		"Debug": "enabled"
+	},
+	"UUID": "com.ryanhenning.sbcsd"
+}
