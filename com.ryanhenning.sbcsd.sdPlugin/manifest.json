@@ -6,23 +6,23 @@
 		{
 			"Name": "Toggle Output",
 			"UUID": "com.ryanhenning.sbcsd.toggle",
-			"Icon": "imgs/actions/counter/icon",
+			"Icon": "imgs/actions/toggle/icon",
 			"Tooltip": "Toggles Creative Sound Blaster output between Headphones and Speakers.",
 			"Controllers": [
 				"Keypad"
 			],
 			"States": [
 				{
-					"Image": "imgs/actions/counter/key",
+					"Image": "imgs/actions/toggle/headphones",
 					"Name": "Headphones",
 					"Title": "Headphones",
-					"TitleAlignment": "middle"
+					"TitleAlignment": "bottom"
 				},
 				{
-					"Image": "imgs/actions/counter/key",
+					"Image": "imgs/actions/toggle/speakers",
 					"Name": "Speakers",
 					"Title": "Speakers",
-					"TitleAlignment": "middle"
+					"TitleAlignment": "bottom"
 				}
 			]
 		}
@@ -37,10 +37,6 @@
 		"MinimumVersion": "7.1"
 	},
 	"OS": [
-		{
-			"Platform": "mac",
-			"MinimumVersion": "12"
-		},
 		{
 			"Platform": "windows",
 			"MinimumVersion": "10"
