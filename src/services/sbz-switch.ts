@@ -160,10 +160,12 @@ export class SbzSwitchService {
 
     /**
      * Sets the audio output to either Headphones (0) or Speakers (1).
+     * Uses `-m false` to prevent sbz-switch from temporarily muting Windows audio,
+     * which avoids the Windows audio endpoint intermittently getting stuck in a muted state.
      */
     async setOutput(output: AudioOutput): Promise<void> {
         const outputValue = output === AudioOutput.Headphones ? "0" : "1";
-        await this.run(["set", "-i", "Device Control", "SelectOutput", outputValue]);
+        await this.run(["set", "-m", "false", "-i", "Device Control", "SelectOutput", outputValue]);
     }
 
     private run(args: string[]): Promise<string> {

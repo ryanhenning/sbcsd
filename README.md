@@ -33,16 +33,26 @@
    ```bash
    npm install
    ```
-3. Build the plugin (this automatically fetches `sbz-switch.exe` v4.1.0 on prebuild):
+3. Build and deploy directly to your Windows Stream Deck installation:
    ```bash
-   npm run build
+   npm run build:win
    ```
-4. Copy the compiled plugin folder to your Windows Stream Deck plugins directory:
-   ```bash
-   cp -r com.ryanhenning.sbcsd.sdPlugin /mnt/c/Users/<YourUsername>/AppData/Roaming/Elgato/StreamDeck/Plugins/
-   ```
-5. Restart the Elgato Stream Deck software on Windows.
-6. Drag the **Toggle Output** key action from the **sbcsd** category in the action sidebar onto any key slot.
+   *(Note: Quit Elgato Stream Deck from your Windows system tray before running if updating existing binaries)*
+4. Relaunch Elgato Stream Deck on Windows.
+5. Drag the **Toggle Output** key action from the **sbcsd** category in the action sidebar onto any key slot.
+
+---
+
+## Available NPM Scripts
+
+| Command | Purpose | When to Use |
+| :--- | :--- | :--- |
+| `npm run build:win` | **Build & Deploy** | Compiles TypeScript source (`src/`), bundles assets, and copies the entire `.sdPlugin` bundle to `%APPDATA%\Elgato\StreamDeck\Plugins\`. Use this for any code changes. |
+| `npm run deploy` | **Fast Sync (No Build)** | Copies the plugin directory straight to Windows AppData without triggering a Rollup build. Ideal for quick updates to icons (`imgs/`), `manifest.json`, or UI files. |
+| `npm run build` | **Build Only** | Runs the `prebuild` dependency fetcher and compiles `src/plugin.ts` into `bin/plugin.js` without copying to the host. |
+| `npm run fetch-deps` | **Fetch Helper CLI** | Downloads the upstream `sbz-switch.exe` v4.1.0 release binary from GitHub into `bin/` if not already present (runs automatically before builds). |
+| `npm run validate` | **Validate Schema** | Runs official Elgato CLI validation against `manifest.json` and directory structure. |
+| `npm run pack` | **Create Distribution Bundle** | Packages the plugin into a distributable `.streamDeckPlugin` installer file for sharing or release. |
 
 ---
 
