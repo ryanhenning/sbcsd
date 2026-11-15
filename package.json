@@ -10,6 +10,8 @@
     },
     "type": "module",
     "scripts": {
+        "test": "vitest run",
+        "test:watch": "vitest",
         "fetch-deps": "node scripts/download-sbz-switch.mjs",
         "prebuild": "npm run fetch-deps",
         "build": "rollup -c",
@@ -29,7 +31,8 @@
         "@types/node": "~24.1.0",
         "rollup": "^4.0.2",
         "tslib": "^2.6.2",
-        "typescript": "^5.2.2"
+        "typescript": "^5.2.2",
+        "vitest": "^5.1.0"
     },
     "dependencies": {
         "@elgato/streamdeck": "^3.0.0"
