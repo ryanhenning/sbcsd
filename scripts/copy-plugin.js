@@ -11,33 +11,36 @@ const PLUGIN_NAME = "com.ryanhenning.sbcsd.sdPlugin";
 const SOURCE_DIR = path.join(REPO_ROOT, PLUGIN_NAME);
 
 function getWindowsAppData() {
-    // 1. Check direct WSL mount for ryanh or other users in /mnt/c/Users
-    const candidatePaths = [
-        "/mnt/c/Users/ryanh/AppData/Roaming",
-        process.env.APPDATA ? execSync(`wslpath -u "${process.env.APPDATA}"`, { encoding: "utf8" }).trim() : null
-    ].filter(Boolean);
+    // 1. If running natively on Windows (or process.env.APPDATA is available)
+    if (process.platform === "win32" && process.env.APPDATA) {
+        return process.env.APPDATA;
+    }
 
-    for (const p of candidatePaths) {
-        if (fs.existsSync(path.join(p, "Elgato", "StreamDeck"))) {
-            return p;
+    if (process.env.APPDATA) {
+        try {
+            const wslPath = execSync(`wslpath -u "${process.env.APPDATA}"`, { encoding: "utf8" }).trim();
+            if (fs.existsSync(wslPath)) return wslPath;
+        } catch {
+            // ignore wslpath error
         }
     }
 
+    // 2. Resolve %APPDATA% via cmd.exe in standard WSL
     try {
-        // 2. Resolve %APPDATA% via cmd.exe in standard WSL
         const raw = execSync('cmd.exe /c "echo %APPDATA%"', { encoding: "utf8" }).trim();
-        const wslPath = execSync(`wslpath -u "${raw}"`, { encoding: "utf8" }).trim();
-        if (fs.existsSync(wslPath)) {
-            return wslPath;
+        if (raw && !raw.includes("%APPDATA%")) {
+            const wslPath = execSync(`wslpath -u "${raw}"`, { encoding: "utf8" }).trim();
+            if (fs.existsSync(wslPath)) return wslPath;
         }
     } catch {
         // cmd.exe may not be on PATH in all environments
     }
 
-    // 3. Fallback: scan /mnt/c/Users
+    // 3. Dynamic search across mounted Windows user profiles in /mnt/c/Users
     const usersDir = "/mnt/c/Users";
     if (fs.existsSync(usersDir)) {
-        const users = fs.readdirSync(usersDir).filter((u) => u !== "Public" && u !== "Default" && u !== "All Users");
+        const systemUsers = new Set(["Public", "Default", "Default User", "All Users"]);
+        const users = fs.readdirSync(usersDir).filter((u) => !systemUsers.has(u));
         for (const user of users) {
             const candidate = path.join(usersDir, user, "AppData", "Roaming");
             if (fs.existsSync(path.join(candidate, "Elgato", "StreamDeck"))) {
@@ -46,7 +49,9 @@ function getWindowsAppData() {
         }
     }
 
-    throw new Error("Unable to locate Windows AppData folder (tried /mnt/c/Users/ryanh/AppData/Roaming).");
+    throw new Error(
+        "Unable to locate Windows AppData folder. Ensure Windows C: drive is mounted at /mnt/c or set APPDATA."
+    );
 }
 
 function copyPlugin() {

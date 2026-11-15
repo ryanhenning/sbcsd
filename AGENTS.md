@@ -34,12 +34,14 @@
 
 ## Common Development Commands
 
+- `npm run watch`: Live watch-sync workflow. Rebuilds on file save with Rollup watcher, dynamically resolves Windows `%APPDATA%` (without hardcoded usernames or paths) to sync files, and reloads the plugin live via Stream Deck CLI (`streamdeck restart com.ryanhenning.sbcsd`).
 - `npm run build`: Prebuilds dependencies and compiles TypeScript with Rollup into `bin/plugin.js`.
 - `npm run build:win`: Compiles TypeScript and deploys to Windows host `%APPDATA%\Elgato\StreamDeck\Plugins\`.
 - `npm run deploy`: Fast sync of `.sdPlugin` directory to Windows host without rebuilding (for icons/manifest changes).
 - `npm run validate`: Validates `manifest.json` and plugin structure against Elgato's official schemas.
 - `npm run pack`: Packages the plugin into a distributable `.streamDeckPlugin` file.
 - `npm run fetch-deps`: Downloads `sbz-switch.exe` from GitHub releases into `bin/`.
+- `npm test` / `npm run test:watch`: Runs unit tests using Vitest.
 
 ---
 
@@ -48,7 +50,8 @@
 - `src/actions/toggle-output.ts`: Main action handling key presses, state sync, and title/image updates.
 - `src/services/sbz-switch.ts`: Wrapper for `sbz-switch.exe` process execution and background event watching.
 - `scripts/download-sbz-switch.mjs`: Automated dependency fetcher.
-- `scripts/copy-plugin.js`: Deployment sync script targeting the Windows host AppData.
+- `scripts/copy-plugin.js`: Deployment sync script targeting the Windows host AppData (dynamically resolved via `%APPDATA%`, `wslpath`, or mounted `/mnt/c/Users` discovery).
+- `scripts/watch-sync.mjs`: Post-build hook triggered on file change during `npm run watch` to sync files and call `streamdeck restart`.
 - `com.ryanhenning.sbcsd.sdPlugin/manifest.json`: Stream Deck plugin manifest.
 - `com.ryanhenning.sbcsd.sdPlugin/bin/`: Build output folder containing `plugin.js` and `sbz-switch.exe` (ignored in `.gitignore`).
 

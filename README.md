@@ -26,7 +26,21 @@
 
 ## Installation & Deployment
 
-### Quick Build & Sync (WSL / Local)
+### Development & Live Reload Workflow
+
+For active development, run the live watch-sync command:
+```bash
+npm run watch
+```
+On every source file save, this command:
+1. Recompiles TypeScript with Rollup.
+2. Dynamically locates your Windows `%APPDATA%` directory (auto-detected via environment variables, `wslpath`, or user profile discovery without any hardcoded paths or usernames).
+3. Copies plugin assets and bundles to `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryanhenning.sbcsd.sdPlugin`.
+4. Hot-reloads the plugin live inside the running Elgato Stream Deck app via `streamdeck restart com.ryanhenning.sbcsd`.
+
+> **Note**: For CLI hot-reloading to connect to Stream Deck, ensure developer mode is enabled in the Stream Deck software or run `streamdeck dev` once.
+
+### Manual Build & Sync (WSL / Local)
 
 1. Clone or open this repository in WSL/Linux.
 2. Install dependencies:
@@ -47,12 +61,15 @@
 
 | Command | Purpose | When to Use |
 | :--- | :--- | :--- |
-| `npm run build:win` | **Build & Deploy** | Compiles TypeScript source (`src/`), bundles assets, and copies the entire `.sdPlugin` bundle to `%APPDATA%\Elgato\StreamDeck\Plugins\`. Use this for any code changes. |
+| `npm run watch` | **Live Watch & Sync** | Watches TypeScript files, auto-rebuilds with Rollup on save, dynamically syncs to Windows AppData without hardcoded paths, and reloads the plugin live via the Stream Deck CLI. |
+| `npm run build:win` | **Build & Deploy** | Compiles TypeScript source (`src/`), bundles assets, and copies the entire `.sdPlugin` bundle to `%APPDATA%\Elgato\StreamDeck\Plugins\`. Use this for one-off manual builds. |
 | `npm run deploy` | **Fast Sync (No Build)** | Copies the plugin directory straight to Windows AppData without triggering a Rollup build. Ideal for quick updates to icons (`imgs/`), `manifest.json`, or UI files. |
 | `npm run build` | **Build Only** | Runs the `prebuild` dependency fetcher and compiles `src/plugin.ts` into `bin/plugin.js` without copying to the host. |
 | `npm run fetch-deps` | **Fetch Helper CLI** | Downloads the upstream `sbz-switch.exe` v4.1.0 release binary from GitHub into `bin/` if not already present (runs automatically before builds). |
 | `npm run validate` | **Validate Schema** | Runs official Elgato CLI validation against `manifest.json` and directory structure. |
 | `npm run pack` | **Create Distribution Bundle** | Packages the plugin into a distributable `.streamDeckPlugin` installer file for sharing or release. |
+| `npm test` | **Run Unit Tests** | Executes Vitest test suite once. |
+| `npm run test:watch` | **Test Watcher** | Runs Vitest in interactive watch mode. |
 
 ---
 

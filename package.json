@@ -19,7 +19,7 @@
         "deploy": "node scripts/copy-plugin.js",
         "pack": "streamdeck pack com.ryanhenning.sbcsd.sdPlugin",
         "validate": "streamdeck validate com.ryanhenning.sbcsd.sdPlugin",
-        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.ryanhenning.sbcsd\""
+        "watch": "rollup -c -w --watch.onEnd=\"node scripts/watch-sync.mjs\""
     },
     "devDependencies": {
         "@elgato/cli": "^1.10.4",
