@@ -13,14 +13,34 @@
 
 ---
 
-## Prerequisites
+## Requirements
 
-- **Sound Card**: Creative Sound Blaster card supported by Sound Blaster Command (e.g. AE-5 / AE-5 Plus / Z-Series).
-- **Software**: 
-  - Sound Blaster Command (or Sound Blaster Control Panel) installed on Windows.
-  - Elgato Stream Deck software v6.0 or higher.
-- **Development**:
-  - Node.js v24 or higher.
+- **Windows 10 or 11.**
+- **Elgato Stream Deck software 7.1 or later.**
+- **A Creative Sound Blaster card supported by Sound Blaster Command** (e.g. AE-5 / AE-5 Plus / Z-Series), with Sound Blaster Command (or the Sound Blaster Control Panel) and Creative's drivers installed.
+
+---
+
+## Using the Plugin
+
+1. Install the plugin from the Elgato Marketplace, or double-click a `.streamDeckPlugin` file from the releases page.
+2. In the Stream Deck app, find the **sbcsd** category in the action list and drag **Toggle Output** onto a key.
+3. Press the key to switch between Headphones and Speakers. The key shows the current output, and it also updates when you change the output in Sound Blaster Command.
+
+### Troubleshooting
+
+- **The key shows a warning triangle when pressed:** the switch failed. Check that Sound Blaster Command is installed and that the card shows up in Windows Sound settings. Plugin logs are in `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryanhenning.sbcsd.sdPlugin\logs`.
+- **The key shows the wrong output:** press it once more, or switch output in Sound Blaster Command; the key resyncs on the next change event.
+- **Antivirus flags `sbz-switch.exe`:** it is the unsigned open-source helper described under Acknowledgments below. It is downloaded from the upstream GitHub release and checked against a pinned SHA-256 digest at build time.
+
+Found a bug? [Open an issue](https://github.com/ryanhenning/sbcsd/issues).
+
+---
+
+## Development Prerequisites
+
+- Node.js v24 or higher.
+- WSL or Linux for the build scripts (they use `python3` to extract the helper download).
 
 ---
 
@@ -78,12 +98,19 @@ On every source file save, this command:
 This plugin relies on the open-source CLI utility **`sbz-switch`** created by **Matthew Donoughe ([@mdonoughe](https://github.com/mdonoughe))**:
 
 - **Repository**: [mdonoughe/sbz-switch](https://github.com/mdonoughe/sbz-switch)
-- **License**: Refer to the upstream repository for license information.
+- **Version bundled**: v4.1.0, unmodified, verified by SHA-256 at build time.
+- **License**: dual-licensed MIT or Apache-2.0; redistributed here under MIT. The notice ships with the plugin in [`THIRD_PARTY_NOTICES.txt`](com.ryanhenning.sbcsd.sdPlugin/THIRD_PARTY_NOTICES.txt).
 
 `sbz-switch` interfaces with Creative's local interop architecture (`Interop.CtSndCr.dll`) to allow programmatic control and event listening over Sound Blaster hardware parameters. Special thanks to Matthew Donoughe for creating and maintaining this tool.
 
 ---
 
+## Trademarks
+
+Creative, Sound Blaster and Sound BlasterX are trademarks of Creative Technology Ltd. This plugin is an independent project and is not affiliated with, sponsored by, or endorsed by Creative Technology Ltd. or Elgato.
+
+---
+
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE). Bundled third-party software is covered by [`THIRD_PARTY_NOTICES.txt`](com.ryanhenning.sbcsd.sdPlugin/THIRD_PARTY_NOTICES.txt).

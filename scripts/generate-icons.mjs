@@ -273,8 +273,7 @@ fs.writeFileSync(path.join(OUT_DIR, "headphones@2x.png"), drawHeadphones(144));
 fs.writeFileSync(path.join(OUT_DIR, "speakers.png"), drawSpeakers(72));
 fs.writeFileSync(path.join(OUT_DIR, "speakers@2x.png"), drawSpeakers(144));
 
-// Also generate category and marketplace icons using the combined aesthetic
-fs.writeFileSync(path.join(OUT_DIR, "icon.png"), drawHeadphones(72));
-fs.writeFileSync(path.join(OUT_DIR, "icon@2x.png"), drawHeadphones(144));
+// The action list icon (imgs/actions/toggle/icon.svg) is a hand-authored monochrome SVG,
+// as Elgato requires, so it is not generated here.
 
 console.log("Generated headphone and speaker icons successfully in:", OUT_DIR);

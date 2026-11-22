@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -13,9 +14,30 @@ const TARGET_EXE = path.join(TARGET_DIR, "sbz-switch.exe");
 const SBZ_VERSION = "v4.1.0";
 const DOWNLOAD_URL = `https://github.com/mdonoughe/sbz-switch/releases/download/${SBZ_VERSION}/sbz-switch-${SBZ_VERSION}.zip`;
 
+// Pinned SHA-256 digests for the v4.1.0 release. If the upstream release asset is ever
+// replaced, the build fails instead of silently bundling an unverified executable.
+// Update both values deliberately when bumping SBZ_VERSION.
+const EXPECTED_ZIP_SHA256 = "83cf49aa754fe0d0062e3525721729783aa6b1f178b063723a2bd30731b33eca";
+const EXPECTED_EXE_SHA256 = "24e6a0675abb5459d0f3b5cbbd42a7e7cd4dd273bd42c56e0c0d40e2175d5ae4";
+
+function sha256(buffer) {
+    return crypto.createHash("sha256").update(buffer).digest("hex");
+}
+
+function verifyExe() {
+    const actual = sha256(fs.readFileSync(TARGET_EXE));
+    if (actual !== EXPECTED_EXE_SHA256) {
+        fs.unlinkSync(TARGET_EXE);
+        throw new Error(
+            `sbz-switch.exe SHA-256 mismatch (expected ${EXPECTED_EXE_SHA256}, got ${actual}). The file was removed.`
+        );
+    }
+}
+
 async function downloadAndExtract() {
     if (fs.existsSync(TARGET_EXE)) {
-        console.log(`[fetch-deps] sbz-switch.exe already exists at ${TARGET_EXE}`);
+        verifyExe();
+        console.log(`[fetch-deps] sbz-switch.exe already exists at ${TARGET_EXE} (SHA-256 verified)`);
         return;
     }
 
@@ -37,7 +59,12 @@ async function downloadAndExtract() {
     }
 
     const arrayBuffer = await response.arrayBuffer();
-    fs.writeFileSync(tempZipPath, Buffer.from(arrayBuffer));
+    const zipBuffer = Buffer.from(arrayBuffer);
+    const zipHash = sha256(zipBuffer);
+    if (zipHash !== EXPECTED_ZIP_SHA256) {
+        throw new Error(`sbz-switch zip SHA-256 mismatch (expected ${EXPECTED_ZIP_SHA256}, got ${zipHash}). Refusing to extract.`);
+    }
+    fs.writeFileSync(tempZipPath, zipBuffer);
     console.log(`[fetch-deps] Downloaded zip archive (${(arrayBuffer.byteLength / 1024).toFixed(1)} KB). Extracting...`);
 
     // Extract using python's built-in zipfile module to avoid extra npm dependencies
@@ -67,6 +94,7 @@ sys.exit(1)
     if (!fs.existsSync(TARGET_EXE)) {
         throw new Error(`Failed to extract sbz-switch.exe into ${TARGET_DIR}`);
     }
+    verifyExe();
 
     console.log(`[fetch-deps] sbz-switch.exe ready at ${TARGET_EXE}`);
 }
