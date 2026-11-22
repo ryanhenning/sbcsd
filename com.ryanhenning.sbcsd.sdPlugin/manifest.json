@@ -30,7 +30,7 @@
 	"Category": "sbcsd",
 	"CategoryIcon": "imgs/plugin/category-icon",
 	"CodePath": "bin/plugin.js",
-	"Description": "Toggle SoundBlaster Command output between Headphones and Speaker",
+	"Description": "Toggle Creative Sound Blaster output between Headphones and Speakers with one key press. Not affiliated with or endorsed by Creative Technology Ltd.",
 	"Icon": "imgs/plugin/marketplace",
 	"SDKVersion": 3,
 	"Software": {
@@ -43,8 +43,7 @@
 		}
 	],
 	"Nodejs": {
-		"Version": "24",
-		"Debug": "enabled"
+		"Version": "24"
 	},
 	"UUID": "com.ryanhenning.sbcsd"
 }

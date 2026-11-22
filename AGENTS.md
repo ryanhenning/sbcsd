@@ -9,7 +9,7 @@
 ## Technical Stack & Environment
 
 - **Runtime**: Node.js v24 (ESM: `"type": "module"`). Note: `__dirname` must be derived via `fileURLToPath(import.meta.url)`.
-- **Stream Deck Software**: Stream Deck 6.0+ on Windows 10/11 host.
+- **Stream Deck Software**: Stream Deck 7.1+ on Windows 10/11 host.
 - **CLI Tooling**: Official Elgato CLI (`@elgato/cli`).
 - **Development Environment**: WSL (Windows Subsystem for Linux) for development/compilation, with automated syncing to the Windows host AppData directory (`%APPDATA%\Elgato\StreamDeck\Plugins\com.ryanhenning.sbcsd.sdPlugin`).
 
@@ -18,7 +18,7 @@
 ## Architecture & Hardware Integration
 
 - **Sound Card**: Creative Sound BlasterX AE-5 Plus (PCIe).
-- **Interop Layer**: `sbz-switch.exe` (v4.1.0 by @mdonoughe). Bundled dynamically into `bin/sbz-switch.exe` on `npm run prebuild`.
+- **Interop Layer**: `sbz-switch.exe` (v4.1.0 by @mdonoughe). Bundled dynamically into `bin/sbz-switch.exe` on `npm run prebuild`; the download is verified against pinned SHA-256 digests in `scripts/download-sbz-switch.mjs` (update them deliberately when bumping the version). Its license notice ships in `com.ryanhenning.sbcsd.sdPlugin/THIRD_PARTY_NOTICES.txt`.
 - **Output Switching**:
   - Sets output via: `sbz-switch.exe set -m false -i "Device Control" SelectOutput <0|1>`
   - `0` = Headphones, `1` = Speakers.
