@@ -89,7 +89,9 @@ export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
 
     private async updateAppearance(actionItem: any, output: AudioOutput): Promise<void> {
         const isHeadphones = output === AudioOutput.Headphones;
-        const title = isHeadphones ? "Headphones" : "Speakers";
+        // The trailing newline adds an empty line under the bottom-aligned title, lifting the
+        // text off the key's bottom edge (Stream Deck doesn't expose a title margin setting).
+        const title = isHeadphones ? "Headphones\n" : "Speakers\n";
 
         if (actionItem.isKey()) {
             await actionItem.setTitle(title);
