@@ -34,7 +34,7 @@
 
 ## Common Development Commands
 
-- `npm run watch`: Live watch-sync workflow. Rebuilds on file save with Rollup watcher, dynamically resolves Windows `%APPDATA%` (without hardcoded usernames or paths) to sync files, and reloads the plugin live via Stream Deck CLI (`streamdeck restart com.ryan-henning.sbcsd`).
+- `npm run watch`: Live watch-sync workflow. Rebuilds on file save with Rollup watcher, dynamically resolves Windows `%APPDATA%` (without hardcoded usernames or paths) to sync files, and reloads the plugin live by sending the `streamdeck://plugins/restart/com.ryan-henning.sbcsd` deep link through Windows `cmd.exe start` (the Elgato CLI's `streamdeck restart` can't open Windows URLs from WSL). Requires one `npm run build` first to fetch `sbz-switch.exe`. Manifest changes need a full Stream Deck app restart.
 - `npm run build`: Prebuilds dependencies and compiles TypeScript with Rollup into `bin/plugin.js`.
 - `npm run build:win`: Compiles TypeScript and deploys to Windows host `%APPDATA%\Elgato\StreamDeck\Plugins\`.
 - `npm run deploy`: Fast sync of `.sdPlugin` directory to Windows host without rebuilding (for icons/manifest changes).
@@ -51,8 +51,8 @@
 - `src/services/sbz-switch.ts`: Wrapper for `sbz-switch.exe` process execution and background event watching.
 - `scripts/download-sbz-switch.mjs`: Automated dependency fetcher.
 - `scripts/copy-plugin.js`: Deployment sync script targeting the Windows host AppData (dynamically resolved via `%APPDATA%`, `wslpath`, or mounted `/mnt/c/Users` discovery).
-- `scripts/watch-sync.mjs`: Post-build hook triggered on file change during `npm run watch` to sync files and call `streamdeck restart`.
+- `scripts/watch-sync.mjs`: Post-build hook triggered on file change during `npm run watch` to stop the plugin, sync changed files (pruning deleted ones, keeping `logs/`), and restart it via the `streamdeck://` deep link.
 - `com.ryan-henning.sbcsd.sdPlugin/manifest.json`: Stream Deck plugin manifest.
 - `com.ryan-henning.sbcsd.sdPlugin/bin/`: Build output folder containing `plugin.js` and `sbz-switch.exe` (ignored in `.gitignore`).
 
-> **Note on Windows File Locks during Deployment**: If `npm run build:win` fails with `EACCES: Permission denied`, ensure Elgato Stream Deck is closed from the Windows system tray before deploying, as Windows locks running executables.
+> **Note on Windows File Locks during Deployment**: If `npm run build:win` fails with `EACCES: Permission denied`, Windows is locking a running executable (usually because `sbz-switch.exe` changed; unchanged files are skipped). Close Elgato Stream Deck from the Windows system tray and re-run.
