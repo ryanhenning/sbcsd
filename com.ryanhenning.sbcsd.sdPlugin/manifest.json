@@ -16,13 +16,15 @@
 					"Image": "imgs/actions/toggle/headphones",
 					"Name": "Headphones",
 					"Title": "Headphones",
-					"TitleAlignment": "bottom"
+					"TitleAlignment": "bottom",
+					"FontSize": 9
 				},
 				{
 					"Image": "imgs/actions/toggle/speakers",
 					"Name": "Speakers",
 					"Title": "Speakers",
-					"TitleAlignment": "bottom"
+					"TitleAlignment": "bottom",
+					"FontSize": 9
 				}
 			]
 		}
