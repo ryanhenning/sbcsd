@@ -27,7 +27,7 @@ function getWindowsAppData() {
 
     // 2. Resolve %APPDATA% via cmd.exe in standard WSL
     try {
-        const raw = execSync('cmd.exe /c "echo %APPDATA%"', { encoding: "utf8" }).trim();
+        const raw = execSync('cmd.exe /c "echo %APPDATA%"', { encoding: "utf8", cwd: "/mnt/c", stdio: ["ignore", "pipe", "ignore"] }).trim();
         if (raw && !raw.includes("%APPDATA%")) {
             const wslPath = execSync(`wslpath -u "${raw}"`, { encoding: "utf8" }).trim();
             if (fs.existsSync(wslPath)) return wslPath;
@@ -54,6 +54,38 @@ function getWindowsAppData() {
     );
 }
 
+/**
+ * cpSync filter: skip files whose destination already has identical contents. This keeps the
+ * watch loop from rewriting bin/sbz-switch.exe (2.4 MB, and locked by Windows while the plugin
+ * runs) on every source save, and skips the plugin's own logs/ folder.
+ */
+function isChanged(src, dest) {
+    if (path.basename(src) === "logs") return false;
+    const srcStat = fs.statSync(src);
+    if (srcStat.isDirectory() || !fs.existsSync(dest)) return true;
+    const destStat = fs.statSync(dest);
+    if (srcStat.size !== destStat.size) return true;
+    return !fs.readFileSync(src).equals(fs.readFileSync(dest));
+}
+
+/**
+ * Removes files from the deployed plugin that no longer exist in the source (e.g. a renamed
+ * or deleted image), so Stream Deck never picks up a stale asset. The logs/ folder is kept.
+ */
+function pruneStale(srcDir, destDir) {
+    for (const entry of fs.readdirSync(destDir, { withFileTypes: true })) {
+        if (entry.name === "logs") continue;
+        const src = path.join(srcDir, entry.name);
+        const dest = path.join(destDir, entry.name);
+        if (!fs.existsSync(src)) {
+            fs.rmSync(dest, { recursive: true, force: true });
+            console.log(`[copy-plugin] Removed stale ${path.relative(path.dirname(SOURCE_DIR), src)}`);
+        } else if (entry.isDirectory()) {
+            pruneStale(src, dest);
+        }
+    }
+}
+
 function copyPlugin() {
     const appData = getWindowsAppData();
     const targetPluginsDir = path.join(appData, "Elgato", "StreamDeck", "Plugins");
@@ -66,7 +98,8 @@ function copyPlugin() {
     }
 
     try {
-        fs.cpSync(SOURCE_DIR, targetDir, { recursive: true, force: true });
+        fs.cpSync(SOURCE_DIR, targetDir, { recursive: true, force: true, filter: isChanged });
+        pruneStale(SOURCE_DIR, targetDir);
         console.log(`[copy-plugin] Successfully deployed to ${targetDir}`);
     } catch (err) {
         if (err.code === "EACCES" || err.code === "EBUSY") {
