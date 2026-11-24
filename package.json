@@ -1,12 +1,12 @@
 {
-    "name": "sbcsd",
+    "name": "streamdeck-sbc-output-switch",
     "version": "0.1.0",
     "description": "Elgato Stream Deck plugin to toggle audio output between Headphones and Speakers on Creative Sound Blaster audio cards.",
     "author": "Ryan Henning",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/ryanhenning/sbcsd.git"
+        "url": "https://github.com/ryanhenning/streamdeck-sbc-output-switch.git"
     },
     "type": "module",
     "scripts": {
