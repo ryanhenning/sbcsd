@@ -39,59 +39,83 @@ Found a bug? [Open an issue](https://github.com/ryanhenning/streamdeck-sbc-outpu
 
 ---
 
-## Development Prerequisites
+## Development
 
-- Node.js v24 or higher.
-- WSL or Linux for the build scripts (they use `python3` to extract the helper download).
+### Prerequisites
 
----
+- **Windows 10/11 with WSL** (or Linux with the Windows `C:` drive mounted at `/mnt/c`). The scripts build in WSL and deploy to the Windows Stream Deck install.
+- **Node.js v24 or higher** in WSL.
+- **`python3`** in WSL. The dependency fetcher uses it to unzip `sbz-switch.exe`.
+- The Elgato Stream Deck app (7.1+) installed on Windows.
 
-## Installation & Deployment
+### First-time setup
 
-### Development & Live Reload Workflow
+```bash
+npm install
+npm run build
+```
 
-For active development, run the live watch-sync command:
+`npm run build` also downloads `sbz-switch.exe` into `com.ryan-henning.sbcsd.sdPlugin/bin/` and checks it against a pinned SHA-256 digest. Run it once before `npm run watch`, because the watcher doesn't fetch the helper.
+
+### Build and deploy once
+
+```bash
+npm run build:win
+```
+
+This builds the plugin and copies the `.sdPlugin` folder to `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryan-henning.sbcsd.sdPlugin`. The deploy script finds `%APPDATA%` on its own (from `$APPDATA`, `cmd.exe`, or `/mnt/c/Users`), so no paths are hardcoded. Then restart the Stream Deck app and drag **Toggle Output** from the **SBC Output Switch** category onto a key.
+
+If you only changed icons or `manifest.json`, `npm run deploy` copies the files without rebuilding.
+
+### Hot reload
+
 ```bash
 npm run watch
 ```
-On every source file save, this command:
-1. Recompiles TypeScript with Rollup.
-2. Dynamically locates your Windows `%APPDATA%` directory (auto-detected via environment variables, `wslpath`, or user profile discovery without any hardcoded paths or usernames).
-3. Copies plugin assets and bundles to `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryan-henning.sbcsd.sdPlugin`.
-4. Hot-reloads the plugin live inside the running Elgato Stream Deck app via `streamdeck restart com.ryan-henning.sbcsd`.
 
-> **Note**: For CLI hot-reloading to connect to Stream Deck, ensure developer mode is enabled in the Stream Deck software or run `streamdeck dev` once.
+Each time you save a source file, this:
 
-### Manual Build & Sync (WSL / Local)
+1. Rebuilds `bin/plugin.js` with Rollup.
+2. Stops the plugin in Stream Deck, so Windows releases its lock on `sbz-switch.exe`.
+3. Syncs to the Windows plugin folder. Only changed files are copied, and files you deleted from the repo are removed from the deployed copy. The plugin's `logs/` folder is kept.
+4. Restarts the plugin by sending `streamdeck://plugins/restart/com.ryan-henning.sbcsd` to Windows. (The Elgato CLI's `streamdeck restart` can't open Windows URLs from WSL, so the script doesn't use it.)
 
-1. Clone or open this repository in WSL/Linux.
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Build and deploy directly to your Windows Stream Deck installation:
-   ```bash
-   npm run build:win
-   ```
-   *(Note: Quit Elgato Stream Deck from your Windows system tray before running if updating existing binaries)*
-4. Relaunch Elgato Stream Deck on Windows.
-5. Drag the **Toggle Output** key action from the **SBC Output Switch** category in the action sidebar onto any key slot.
+### What a plugin restart doesn't reload
 
----
+The hot reload restarts the plugin's code only. Stream Deck reads `manifest.json` when the app starts, so after changing the plugin name, category, icons, state images or title settings:
 
-## Available NPM Scripts
+- **Quit and reopen the Stream Deck app** (from the system tray).
+- **Remove the key and drag it back on** for per-key defaults like title font size or alignment. Keys already on your deck keep the settings they were saved with.
 
-| Command | Purpose | When to Use |
-| :--- | :--- | :--- |
-| `npm run watch` | **Live Watch & Sync** | Watches TypeScript files, auto-rebuilds with Rollup on save, dynamically syncs to Windows AppData without hardcoded paths, and reloads the plugin live via the Stream Deck CLI. |
-| `npm run build:win` | **Build & Deploy** | Compiles TypeScript source (`src/`), bundles assets, and copies the entire `.sdPlugin` bundle to `%APPDATA%\Elgato\StreamDeck\Plugins\`. Use this for one-off manual builds. |
-| `npm run deploy` | **Fast Sync (No Build)** | Copies the plugin directory straight to Windows AppData without triggering a Rollup build. Ideal for quick updates to icons (`imgs/`), `manifest.json`, or UI files. |
-| `npm run build` | **Build Only** | Runs the `prebuild` dependency fetcher and compiles `src/plugin.ts` into `bin/plugin.js` without copying to the host. |
-| `npm run fetch-deps` | **Fetch Helper CLI** | Downloads the upstream `sbz-switch.exe` v4.1.0 release binary from GitHub into `bin/` if not already present (runs automatically before builds). |
-| `npm run validate` | **Validate Schema** | Runs official Elgato CLI validation against `manifest.json` and directory structure. |
-| `npm run pack` | **Create Distribution Bundle** | Packages the plugin into a distributable `.streamDeckPlugin` installer file for sharing or release. |
-| `npm test` | **Run Unit Tests** | Executes Vitest test suite once. |
-| `npm run test:watch` | **Test Watcher** | Runs Vitest in interactive watch mode. |
+### Deploy troubleshooting
+
+- **`EACCES` / `EBUSY` while copying:** Windows is locking a file the running plugin holds open. This usually means `sbz-switch.exe` changed (for example, after bumping its version). Quit Stream Deck from the system tray and run the command again.
+- **Two "Toggle Output" actions show up:** an old copy of the plugin, such as one installed under a previous UUID, is still in `%APPDATA%\Elgato\StreamDeck\Plugins\`. Quit Stream Deck, delete the old folder and restart.
+- **Plugin logs:** `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryan-henning.sbcsd.sdPlugin\logs\`.
+
+### Before a release
+
+```bash
+npm test
+npm run validate
+npm audit
+npm run pack
+```
+
+`npm audit` matters because Rollup bundles dependencies into `bin/plugin.js`, so a vulnerable dependency ships inside the plugin. `npm run pack` writes a `com.ryan-henning.sbcsd.streamDeckPlugin` installer for the Marketplace or for sharing.
+
+### NPM scripts
+
+| Command | What it does |
+| :--- | :--- |
+| `npm run build` | Fetches and verifies `sbz-switch.exe` if it's missing, then builds `bin/plugin.js`. |
+| `npm run build:win` | `build`, then deploys to the Windows Stream Deck plugins folder. |
+| `npm run deploy` | Deploys without rebuilding (icons, manifest). |
+| `npm run watch` | Rebuilds on save, syncs, and restarts the plugin in Stream Deck. |
+| `npm run fetch-deps` | Downloads and verifies `sbz-switch.exe` only. |
+| `npm test` / `npm run test:watch` | Runs the Vitest unit tests once, or in watch mode. |
+| `npm run validate` | Validates the manifest and plugin folder against Elgato's schemas. |
+| `npm run pack` | Builds the `.streamDeckPlugin` installer. |
 
 ---
 
