@@ -1,6 +1,6 @@
 # SBC Output Switch
 
-**SBC Output Switch** (repository: `sbcsd`) is an Elgato Stream Deck plugin for users of **Creative Sound Blaster Command (SBC)**. It switches Sound Blaster Command's output between **Headphones** and **Speakers** with one key press, the same setting as the output toggle in the Sound Blaster Command app, without opening it. It is built with Node.js, TypeScript, and the official Elgato SDK.
+**SBC Output Switch** (repository: `streamdeck-sbc-output-switch`) is an Elgato Stream Deck plugin for users of **Creative Sound Blaster Command (SBC)**. It switches Sound Blaster Command's output between **Headphones** and **Speakers** with one key press, the same setting as the output toggle in the Sound Blaster Command app, without opening it. It is built with Node.js, TypeScript, and the official Elgato SDK.
 
 > This plugin controls Sound Blaster Command's output setting. It works only with Sound Blaster cards managed by Sound Blaster Command (such as the Sound BlasterX AE-5 / AE-5 Plus), not every Sound Blaster device.
 
@@ -35,7 +35,7 @@
 - **The key shows the wrong output:** press it once more, or switch output in Sound Blaster Command; the key resyncs on the next change event.
 - **Antivirus flags `sbz-switch.exe`:** it is the unsigned open-source helper described under Acknowledgments below. It is downloaded from the upstream GitHub release and checked against a pinned SHA-256 digest at build time.
 
-Found a bug? [Open an issue](https://github.com/ryanhenning/sbcsd/issues).
+Found a bug? [Open an issue](https://github.com/ryanhenning/streamdeck-sbc-output-switch/issues).
 
 ---
 
