@@ -1,51 +1,53 @@
 {
-	"Name": "sbcsd",
-	"Version": "0.1.0.0",
-	"Author": "ryanhenning",
-	"Actions": [
-		{
-			"Name": "Toggle Output",
-			"UUID": "com.ryanhenning.sbcsd.toggle",
-			"Icon": "imgs/actions/toggle/icon",
-			"Tooltip": "Toggles Creative Sound Blaster output between Headphones and Speakers.",
-			"Controllers": [
-				"Keypad"
-			],
-			"States": [
-				{
-					"Image": "imgs/actions/toggle/headphones",
-					"Name": "Headphones",
-					"Title": "Headphones",
-					"TitleAlignment": "bottom",
-					"FontSize": 9
-				},
-				{
-					"Image": "imgs/actions/toggle/speakers",
-					"Name": "Speakers",
-					"Title": "Speakers",
-					"TitleAlignment": "bottom",
-					"FontSize": 9
-				}
-			]
-		}
-	],
-	"Category": "sbcsd",
-	"CategoryIcon": "imgs/plugin/category-icon",
-	"CodePath": "bin/plugin.js",
-	"Description": "Toggle Creative Sound Blaster output between Headphones and Speakers with one key press. Not affiliated with or endorsed by Creative Technology Ltd.",
-	"Icon": "imgs/plugin/marketplace",
-	"SDKVersion": 3,
-	"Software": {
-		"MinimumVersion": "7.1"
-	},
-	"OS": [
-		{
-			"Platform": "windows",
-			"MinimumVersion": "10"
-		}
-	],
-	"Nodejs": {
-		"Version": "24"
-	},
-	"UUID": "com.ryanhenning.sbcsd"
+  "Name": "sbcsd",
+  "Version": "0.1.0.0",
+  "Author": "ryanhenning",
+  "Actions": [
+    {
+      "Name": "Toggle Output",
+      "UUID": "com.ryanhenning.sbcsd.toggle",
+      "Icon": "imgs/actions/toggle/icon",
+      "Tooltip": "Toggles Creative Sound Blaster output between Headphones and Speakers.",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/toggle/headphones",
+          "Name": "Headphones",
+          "Title": "Headphones\n",
+          "TitleAlignment": "bottom",
+          "FontFamily": "Arial",
+          "FontStyle": "Bold",
+          "FontSize": 9
+        },
+        {
+          "Image": "imgs/actions/toggle/speakers",
+          "Name": "Speakers",
+          "Title": "Speakers\n",
+          "TitleAlignment": "bottom",
+          "FontFamily": "Arial",
+          "FontStyle": "Bold",
+          "FontSize": 9
+        }
+      ]
+    }
+  ],
+  "Category": "sbcsd",
+  "CategoryIcon": "imgs/plugin/category-icon",
+  "CodePath": "bin/plugin.js",
+  "Description": "Toggle Creative Sound Blaster output between Headphones and Speakers with one key press. Not affiliated with or endorsed by Creative Technology Ltd.",
+  "Icon": "imgs/plugin/marketplace",
+  "SDKVersion": 3,
+  "Software": {
+    "MinimumVersion": "7.1"
+  },
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Nodejs": {
+    "Version": "24"
+  },
+  "UUID": "com.ryanhenning.sbcsd"
 }
