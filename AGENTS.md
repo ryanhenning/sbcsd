@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-`sbcsd` is a custom Elgato Stream Deck plugin built using Node.js (v24+), TypeScript, and the official Elgato SDK (`@elgato/streamdeck`). It provides a one-touch key action on Windows to instantly toggle audio output between **Headphones** and **Speakers** on a Creative Sound Blaster card (e.g. Sound BlasterX AE-5 Plus) without opening the Creative desktop app.
+`sbcsd` (published as **SBC Output Switch**) is a custom Elgato Stream Deck plugin for Sound Blaster Command users, built using Node.js (v24+), TypeScript, and the official Elgato SDK (`@elgato/streamdeck`). It provides a one-touch key action on Windows to instantly toggle audio output between **Headphones** and **Speakers** on a Creative Sound Blaster card (e.g. Sound BlasterX AE-5 Plus) without opening the Creative desktop app.
 
 ---
 
