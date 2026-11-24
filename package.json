@@ -17,8 +17,8 @@
         "build": "rollup -c",
         "build:win": "npm run build && node scripts/copy-plugin.js",
         "deploy": "node scripts/copy-plugin.js",
-        "pack": "streamdeck pack com.ryanhenning.sbcsd.sdPlugin",
-        "validate": "streamdeck validate com.ryanhenning.sbcsd.sdPlugin",
+        "pack": "streamdeck pack com.ryan-henning.sbcsd.sdPlugin",
+        "validate": "streamdeck validate com.ryan-henning.sbcsd.sdPlugin",
         "watch": "rollup -c -w --watch.onEnd=\"node scripts/watch-sync.mjs\""
     },
     "devDependencies": {
