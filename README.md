@@ -1,6 +1,8 @@
-# sbcsd (Sound Blaster Command Stream Deck Plugin)
+# SBC Output Switch
 
-`sbcsd` is a custom Elgato Stream Deck plugin built with Node.js, TypeScript, and the official Elgato SDK. It allows you to toggle audio output between **Headphones** and **Speakers** on Creative Sound Blaster audio cards (such as the Sound BlasterX AE-5 Plus) directly from your Stream Deck hardware.
+**SBC Output Switch** (repository: `sbcsd`) is an Elgato Stream Deck plugin for users of **Creative Sound Blaster Command (SBC)**. It switches Sound Blaster Command's output between **Headphones** and **Speakers** with one key press, the same setting as the output toggle in the Sound Blaster Command app, without opening it. It is built with Node.js, TypeScript, and the official Elgato SDK.
+
+> This plugin controls Sound Blaster Command's output setting. It works only with Sound Blaster cards managed by Sound Blaster Command (such as the Sound BlasterX AE-5 / AE-5 Plus), not every Sound Blaster device.
 
 ---
 
@@ -17,14 +19,14 @@
 
 - **Windows 10 or 11.**
 - **Elgato Stream Deck software 7.1 or later.**
-- **A Creative Sound Blaster card supported by Sound Blaster Command** (e.g. AE-5 / AE-5 Plus / Z-Series), with Sound Blaster Command (or the Sound Blaster Control Panel) and Creative's drivers installed.
+- **Creative Sound Blaster Command installed**, managing a supported Sound Blaster card (e.g. AE-5 / AE-5 Plus / Z-Series), with Creative's drivers installed.
 
 ---
 
 ## Using the Plugin
 
 1. Install the plugin from the Elgato Marketplace, or double-click a `.streamDeckPlugin` file from the releases page.
-2. In the Stream Deck app, find the **sbcsd** category in the action list and drag **Toggle Output** onto a key.
+2. In the Stream Deck app, find the **SBC Output Switch** category in the action list and drag **Toggle Output** onto a key.
 3. Press the key to switch between Headphones and Speakers. The key shows the current output, and it also updates when you change the output in Sound Blaster Command.
 
 ### Troubleshooting
@@ -73,7 +75,7 @@ On every source file save, this command:
    ```
    *(Note: Quit Elgato Stream Deck from your Windows system tray before running if updating existing binaries)*
 4. Relaunch Elgato Stream Deck on Windows.
-5. Drag the **Toggle Output** key action from the **sbcsd** category in the action sidebar onto any key slot.
+5. Drag the **Toggle Output** key action from the **SBC Output Switch** category in the action sidebar onto any key slot.
 
 ---
 

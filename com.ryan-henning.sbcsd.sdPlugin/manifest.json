@@ -1,5 +1,5 @@
 {
-  "Name": "sbcsd",
+  "Name": "SBC Output Switch",
   "Version": "0.1.0.0",
   "Author": "Ryan Henning",
   "Actions": [
@@ -7,7 +7,7 @@
       "Name": "Toggle Output",
       "UUID": "com.ryan-henning.sbcsd.toggle",
       "Icon": "imgs/actions/toggle/icon",
-      "Tooltip": "Toggles Creative Sound Blaster output between Headphones and Speakers.",
+      "Tooltip": "Switches Sound Blaster Command output between Headphones and Speakers.",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -31,10 +31,10 @@
       ]
     }
   ],
-  "Category": "sbcsd",
+  "Category": "SBC Output Switch",
   "CategoryIcon": "imgs/plugin/category-icon",
   "CodePath": "bin/plugin.js",
-  "Description": "Toggle Creative Sound Blaster output between Headphones and Speakers with one key press. Not affiliated with or endorsed by Creative Technology Ltd.",
+  "Description": "Switch Sound Blaster Command between Headphones and Speakers with one key press. Requires Creative Sound Blaster Command on Windows. Not affiliated with or endorsed by Creative Technology Ltd.",
   "Icon": "imgs/plugin/marketplace",
   "SDKVersion": 3,
   "Software": {
