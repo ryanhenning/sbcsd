@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PLUGIN_UUID = "com.ryanhenning.sbcsd";
+const PLUGIN_UUID = "com.ryan-henning.sbcsd";
 
 /**
  * Sends a streamdeck:// deep link to the Stream Deck app.

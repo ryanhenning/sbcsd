@@ -12,7 +12,7 @@ type ToggleOutputSettings = {
     currentOutput?: AudioOutput;
 };
 
-@action({ UUID: "com.ryanhenning.sbcsd.toggle" })
+@action({ UUID: "com.ryan-henning.sbcsd.toggle" })
 export class ToggleOutputAction extends SingletonAction<ToggleOutputSettings> {
     private activeActions = new Set<any>();
     private unsubscribeWatcher: (() => void) | null = null;

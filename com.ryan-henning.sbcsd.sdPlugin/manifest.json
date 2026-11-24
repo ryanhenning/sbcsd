@@ -1,11 +1,11 @@
 {
   "Name": "sbcsd",
   "Version": "0.1.0.0",
-  "Author": "ryanhenning",
+  "Author": "Ryan Henning",
   "Actions": [
     {
       "Name": "Toggle Output",
-      "UUID": "com.ryanhenning.sbcsd.toggle",
+      "UUID": "com.ryan-henning.sbcsd.toggle",
       "Icon": "imgs/actions/toggle/icon",
       "Tooltip": "Toggles Creative Sound Blaster output between Headphones and Speakers.",
       "Controllers": ["Keypad"],
@@ -49,5 +49,5 @@
   "Nodejs": {
     "Version": "24"
   },
-  "UUID": "com.ryanhenning.sbcsd"
+  "UUID": "com.ryan-henning.sbcsd"
 }

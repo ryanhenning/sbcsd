@@ -29,7 +29,7 @@
 
 ### Troubleshooting
 
-- **The key shows a warning triangle when pressed:** the switch failed. Check that Sound Blaster Command is installed and that the card shows up in Windows Sound settings. Plugin logs are in `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryanhenning.sbcsd.sdPlugin\logs`.
+- **The key shows a warning triangle when pressed:** the switch failed. Check that Sound Blaster Command is installed and that the card shows up in Windows Sound settings. Plugin logs are in `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryan-henning.sbcsd.sdPlugin\logs`.
 - **The key shows the wrong output:** press it once more, or switch output in Sound Blaster Command; the key resyncs on the next change event.
 - **Antivirus flags `sbz-switch.exe`:** it is the unsigned open-source helper described under Acknowledgments below. It is downloaded from the upstream GitHub release and checked against a pinned SHA-256 digest at build time.
 
@@ -55,8 +55,8 @@ npm run watch
 On every source file save, this command:
 1. Recompiles TypeScript with Rollup.
 2. Dynamically locates your Windows `%APPDATA%` directory (auto-detected via environment variables, `wslpath`, or user profile discovery without any hardcoded paths or usernames).
-3. Copies plugin assets and bundles to `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryanhenning.sbcsd.sdPlugin`.
-4. Hot-reloads the plugin live inside the running Elgato Stream Deck app via `streamdeck restart com.ryanhenning.sbcsd`.
+3. Copies plugin assets and bundles to `%APPDATA%\Elgato\StreamDeck\Plugins\com.ryan-henning.sbcsd.sdPlugin`.
+4. Hot-reloads the plugin live inside the running Elgato Stream Deck app via `streamdeck restart com.ryan-henning.sbcsd`.
 
 > **Note**: For CLI hot-reloading to connect to Stream Deck, ensure developer mode is enabled in the Stream Deck software or run `streamdeck dev` once.
 
@@ -99,7 +99,7 @@ This plugin relies on the open-source CLI utility **`sbz-switch`** created by **
 
 - **Repository**: [mdonoughe/sbz-switch](https://github.com/mdonoughe/sbz-switch)
 - **Version bundled**: v4.1.0, unmodified, verified by SHA-256 at build time.
-- **License**: dual-licensed MIT or Apache-2.0; redistributed here under MIT. The notice ships with the plugin in [`THIRD_PARTY_NOTICES.txt`](com.ryanhenning.sbcsd.sdPlugin/THIRD_PARTY_NOTICES.txt).
+- **License**: dual-licensed MIT or Apache-2.0; redistributed here under MIT. The notice ships with the plugin in [`THIRD_PARTY_NOTICES.txt`](com.ryan-henning.sbcsd.sdPlugin/THIRD_PARTY_NOTICES.txt).
 
 `sbz-switch` interfaces with Creative's local interop architecture (`Interop.CtSndCr.dll`) to allow programmatic control and event listening over Sound Blaster hardware parameters. Special thanks to Matthew Donoughe for creating and maintaining this tool.
 
@@ -113,4 +113,4 @@ Creative, Sound Blaster and Sound BlasterX are trademarks of Creative Technology
 
 ## License
 
-MIT. See [LICENSE](LICENSE). Bundled third-party software is covered by [`THIRD_PARTY_NOTICES.txt`](com.ryanhenning.sbcsd.sdPlugin/THIRD_PARTY_NOTICES.txt).
+MIT. See [LICENSE](LICENSE). Bundled third-party software is covered by [`THIRD_PARTY_NOTICES.txt`](com.ryan-henning.sbcsd.sdPlugin/THIRD_PARTY_NOTICES.txt).

@@ -20,7 +20,7 @@ export class SbzSwitchService {
     private restartTimer: NodeJS.Timeout | null = null;
 
     constructor() {
-        // In the Stream Deck runtime, plugin.js runs inside com.ryanhenning.sbcsd.sdPlugin/bin
+        // In the Stream Deck runtime, plugin.js runs inside com.ryan-henning.sbcsd.sdPlugin/bin
         // sbz-switch.exe is stored right beside it in bin/sbz-switch.exe
         this.exePath = path.join(__dirname, "sbz-switch.exe");
     }

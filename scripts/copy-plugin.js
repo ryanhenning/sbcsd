@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const REPO_ROOT = path.resolve(__dirname, "..");
-const PLUGIN_NAME = "com.ryanhenning.sbcsd.sdPlugin";
+const PLUGIN_NAME = "com.ryan-henning.sbcsd.sdPlugin";
 const SOURCE_DIR = path.join(REPO_ROOT, PLUGIN_NAME);
 
 function getWindowsAppData() {

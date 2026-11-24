@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const REPO_ROOT = path.resolve(__dirname, "..");
-const TARGET_DIR = path.join(REPO_ROOT, "com.ryanhenning.sbcsd.sdPlugin", "bin");
+const TARGET_DIR = path.join(REPO_ROOT, "com.ryan-henning.sbcsd.sdPlugin", "bin");
 const TARGET_EXE = path.join(TARGET_DIR, "sbz-switch.exe");
 
 const SBZ_VERSION = "v4.1.0";
